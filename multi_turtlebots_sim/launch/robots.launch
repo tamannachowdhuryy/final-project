@@ -1,36 +1,28 @@
 <launch>
-  <!-- No namespace here as we will share this description.
-       Access with slash at the beginning -->
+  <!-- Load the robot description -->
   <param name="robot_description"
-    command="$(find xacro)/xacro --inorder $(find multi_turtlebots_sim)/turtlebot3_description/urdf/turtlebot3_burger.urdf.xacro" />
-    <!--
-    command="$(find xacro)/xacro.py $(find turtlebot_description)/robots/kobuki_hexagons_asus_xtion_pro.urdf.xacro" />-->
+         command="$(find xacro)/xacro --inorder $(find multi_turtlebots_sim)/turtlebot3_description/urdf/turtlebot3_burger.urdf.xacro" />
 
-  <!-- BEGIN ROBOT 1-->
-  <group ns="robot1">
-    <param name="tf_prefix" value="robot1_tf" />
-    <include file="$(find multi_turtlebots_sim)/launch/one_robot.launch" >
-      <arg name="init_pose" value="-x 3 -y 1 -z 0" />
-      <arg name="robot_name"  value="Robot1" />
-    </include>
-  </group>
-
-  <!-- BEGIN ROBOT 2-->
+  <!-- Spawn Robot2 -->
   <group ns="robot2">
+    <!-- Unique transform prefix -->
     <param name="tf_prefix" value="robot2_tf" />
-    <include file="$(find multi_turtlebots_sim)/launch/one_robot.launch" >
-      <arg name="init_pose" value="-x -4 -y 1 -z 0" />
-      <arg name="robot_name"  value="Robot2" />
+    <!-- Include single robot launch file with Robot2's position and name -->
+    <include file="$(find multi_turtlebots_sim)/launch/one_robot.launch">
+      <arg name="init_pose" value="-x 1 -y 2 -z 0" /> <!-- Robot2 position -->
+      <arg name="robot_name" value="Robot2" />
     </include>
   </group>
 
-  <!-- BEGIN ROBOT 3-->
-  <group ns="robot3">
-    <param name="tf_prefix" value="robot3_tf" />
-    <include file="$(find multi_turtlebots_sim)/launch/one_robot.launch" >
-      <arg name="init_pose" value="-x 1 -y -6 -z 0" />
-      <arg name="robot_name"  value="Robot3" />
+  <!-- Spawn Robot1 -->
+  <group ns="robot1">
+    <!-- Unique transform prefix -->
+    <param name="tf_prefix" value="robot1_tf" />
+    <!-- Include single robot launch file with Robot1's position and name -->
+    <include file="$(find multi_turtlebots_sim)/launch/one_robot.launch">
+      <arg name="init_pose" value="-x 0.5 -y 2 -z 0" /> <!-- Robot1 behind Robot2 -->
+      <arg name="robot_name" value="Robot1" />
     </include>
   </group>
-
 </launch>
+
