@@ -9,7 +9,7 @@
     <param name="tf_prefix" value="robot2_tf" />
     <!-- Include single robot launch file with Robot2's position and name -->
     <include file="$(find multi_turtlebots_sim)/launch/one_robot.launch">
-      <arg name="init_pose" value="-x 1 -y 2 -z 0" /> <!-- Robot2 position -->
+      <arg name="init_pose" value="-x 0.5 -y 2 -z 0" /> <!-- Robot2 position -->
       <arg name="robot_name" value="Robot2" />
     </include>
   </group>
@@ -20,9 +20,14 @@
     <param name="tf_prefix" value="robot1_tf" />
     <!-- Include single robot launch file with Robot1's position and name -->
     <include file="$(find multi_turtlebots_sim)/launch/one_robot.launch">
-      <arg name="init_pose" value="-x 0.5 -y 2 -z 0" /> <!-- Robot1 behind Robot2 -->
+      <arg name="init_pose" value="-x 1.0 -y 2 -z 0" /> <!-- Robot1 in front of Robot2 -->
       <arg name="robot_name" value="Robot1" />
     </include>
   </group>
+  
+    <!-- Launch teleop_twist_keyboard for Robot1 -->
+  <node pkg="multi_turtlebots_sim" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard" output="screen">
+    <param name="use_sim_time" value="true" />
+  </node>
 </launch>
 
