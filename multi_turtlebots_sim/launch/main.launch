@@ -7,4 +7,9 @@
 
   <!-- include our robots -->
   <include file="$(find multi_turtlebots_sim)/launch/robots.launch"/>
+  
+    <!-- Launch RViz for Robot2 -->
+  <node name="rviz_robot2" pkg="rviz" type="rviz" output="screen" args="-d $(find multi_turtlebots_sim)/rviz/robot2.rviz">
+    <param name="use_sim_time" value="true" />
+  </node>
 </launch>

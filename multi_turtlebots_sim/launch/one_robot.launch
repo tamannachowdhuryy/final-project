@@ -1,12 +1,19 @@
 <launch>
-    <arg name="robot_name"/>
-    <arg name="init_pose"/>
+    <!-- Arguments -->
+    <arg name="robot_name" />
+    <arg name="init_pose" default="-x 0 -y 0 -z 0" />
+    <arg name="robot_urdf" />
 
-    <node name="spawn_minibot_model" pkg="gazebo_ros" type="spawn_model"
-     args="$(arg init_pose) -urdf -param /robot_description -model $(arg robot_name)"
-     respawn="false" output="screen" />
+    <!-- Load robot description -->
+    <param name="/robot_description"
+           command="$(find xacro)/xacro $(arg robot_urdf)" />
 
+    <!-- Spawn the robot in Gazebo -->
+    <node name="$(arg robot_name)_spawn" pkg="gazebo_ros" type="spawn_model"
+          args="$(arg init_pose) -urdf -param /robot_description -model $(arg robot_name)"
+          respawn="false" output="screen" />
+
+    <!-- Publish robot state -->
     <node pkg="robot_state_publisher" type="robot_state_publisher"
-          name="robot_state_publisher" output="screen"/>
-    <!--<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />-->
+          name="$(arg robot_name)_state_publisher" output="screen" />
 </launch>

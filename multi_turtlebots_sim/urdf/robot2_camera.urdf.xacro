@@ -1,0 +1,50 @@
+<robot name="robot2">
+    <!-- Base link -->
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="0.3 0.3 0.1"/>
+            </geometry>
+            <material>
+                <color rgba="0.5 0.5 0.5 1.0"/>
+            </material>
+        </visual>
+    </link>
+
+    <!-- Camera -->
+    <link name="robot2_camera_frame">
+        <visual>
+            <geometry>
+                <box size="0.1 0.1 0.1"/>
+            </geometry>
+            <material>
+                <color rgba="0.5 0.5 0.5 1.0"/>
+            </material>
+        </visual>
+    </link>
+
+    <!-- Joint to attach camera -->
+    <joint name="camera_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="robot2_camera_frame"/>
+    </joint>
+
+    <!-- Gazebo Plugin for Camera -->
+    <gazebo>
+        <plugin name="robot2_camera_plugin" filename="libgazebo_ros_camera.so">
+            <update_rate>30.0</update_rate>
+            <camera_name>robot2_camera</camera_name>
+            <image_topic_name>/robot2/camera/image_raw</image_topic_name>
+            <camera_info_topic_name>/robot2/camera/camera_info</camera_info_topic_name>
+            <frame_name>robot2_camera_frame</frame_name>
+            <hack_baseline>0.07</hack_baseline>
+            <image_width>640</image_width>
+            <image_height>480</image_height>
+            <fov>1.047</fov>
+            <clip>
+                <near>0.1</near>
+                <far>100.0</far>
+            </clip>
+        </plugin>
+    </gazebo>
+</robot>
