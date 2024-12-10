@@ -1,35 +1,40 @@
 <launch>
-  <!-- Load the robot description -->
-  <param name="robot_description"
-         command="$(find xacro)/xacro --inorder $(find multi_turtlebots_sim)/turtlebot3_description/urdf/turtlebot3_burger.urdf.xacro" />
+  <!-- Launch Gazebo -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_house.world" />
+    <arg name="use_sim_time" value="true" />
+    <arg name="paused" value="false" />
+  </include>
 
-  <!-- Spawn Robot2 -->
-  <group ns="robot2">
-    <!-- Unique transform prefix -->
-    <param name="tf_prefix" value="robot2_tf" />
-    <!-- Include single robot launch file with Robot2's position and name -->
-    <include file="$(find multi_turtlebots_sim)/launch/one_robot.launch">
-      <arg name="init_pose" value="-x 0.5 -y 2 -z 0" /> <!-- Robot2 position -->
-      <arg name="robot_name" value="Robot2" />
-      <arg name="robot_urdf" value="$(find multi_turtlebots_sim)/urdf/robot2_camera.urdf.xacro" />
-    </include>
-  </group>
+  <!-- Load the robot description -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find multi_turtlebots_sim)/turtlebot3_description/urdf/turtlebot3_burger.urdf.xacro" />
 
   <!-- Spawn Robot1 -->
   <group ns="robot1">
-    <!-- Unique transform prefix -->
     <param name="tf_prefix" value="robot1_tf" />
-    <!-- Include single robot launch file with Robot1's position and name -->
     <include file="$(find multi_turtlebots_sim)/launch/one_robot.launch">
-      <arg name="init_pose" value="-x 1.0 -y 2 -z 0" /> <!-- Robot1 in front of Robot2 -->
-      <arg name="robot_name" value="Robot1" />
-      <arg name="robot_urdf" value="$(find multi_turtlebots_sim)/turtlebot3_description/urdf/turtlebot3_burger.urdf.xacro" />
-
+      <arg name="init_pose" value="-x 1 -y 0 -z 0" />
+      <arg name="robot_name" value="robot1" />
     </include>
   </group>
-  
-    <!-- Launch teleop_twist_keyboard for Robot1 -->
+
+  <!-- Spawn Robot2 -->
+  <group ns="robot2">
+    <param name="tf_prefix" value="robot2_tf" />
+    <include file="$(find multi_turtlebots_sim)/launch/one_robot.launch">
+      <arg name="init_pose" value="-x 0 -y 0 -z 0" />
+      <arg name="robot_name" value="robot2" />
+    </include>
+  </group>
+
+  <!-- Launch teleop_twist_keyboard for Robot1 -->
   <node pkg="multi_turtlebots_sim" type="teleop_twist_keyboard.py" name="teleop_twist_keyboard" output="screen">
     <param name="use_sim_time" value="true" />
   </node>
+
+  <!-- Launch follower.py for Robot2 -->
+  <node pkg="multi_turtlebots_sim" type="follower.py" name="follower_node" output="screen">
+    <param name="use_sim_time" value="true" />
+  </node>
 </launch>
+
